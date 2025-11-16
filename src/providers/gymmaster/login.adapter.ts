@@ -1,6 +1,6 @@
 import axios from "axios";
 import qs from "qs";
-import { logger } from "../../config/logger.js";
+import logger from "../../config/logger.js";
 import { config } from "../../config/env.js";
 import { VendorError } from "../../core/http/error.js";
 

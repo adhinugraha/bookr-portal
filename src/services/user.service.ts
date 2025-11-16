@@ -1,6 +1,6 @@
 import { UserRepository } from "../repositories/user.repository.js";
 import { AppError } from "../core/http/error.js";
-import { logger } from "../config/logger.js";
+import logger from "../config/logger.js";
 import { GMMemberAdapter } from "../providers/gymmaster/member.adapter.js";
 import { ExternalTokenRepository } from "../repositories/externalToken.repository.js";
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { logger } from "../config/logger.js";
+import logger from "../config/logger.js";
 import { response } from "../core/http/response.js";
 import { UserService } from "../services/user.service.js";
 

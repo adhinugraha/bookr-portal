@@ -1,5 +1,5 @@
 import { Client, neon } from "@neondatabase/serverless";
-import { logger } from "../config/logger.js";
+import logger from "../config/logger.js";
 import { config } from "../config/env.js";
 
 let sqlImpl: any;

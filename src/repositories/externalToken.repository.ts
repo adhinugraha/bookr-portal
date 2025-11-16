@@ -5,7 +5,7 @@ import {
   ExternalToken,
   NewExternalToken
 } from "../database/schema/externalTokens.js";
-import { logger } from "../config/logger.js";
+import logger from "../config/logger.js";
 import { redis } from "../database/redis.js";
 
 export const ExternalTokenRepository = {

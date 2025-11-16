@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service.js";
-import { logger } from "../config/logger.js";
+import logger from "../config/logger.js";
 import { response } from "../core/http/response.js";
 
 export const AuthController = {

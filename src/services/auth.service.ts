@@ -3,7 +3,7 @@ import { UserRepository } from "../repositories/user.repository.js";
 import { ExternalTokenRepository } from "../repositories/externalToken.repository.js";
 import { LoginRequest } from "../types/dto/login.dto.js";
 import { AppError } from "../core/http/error.js";
-import { logger } from "../config/logger.js";
+import logger from "../config/logger.js";
 import bcrypt from "bcryptjs";
 import { GMLoginAdapter } from "../providers/gymmaster/login.adapter.js";
 import { SignJWT } from "jose";
