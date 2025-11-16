@@ -61,24 +61,25 @@ export class AuthService {
 		const payload: JwtPayload = {
 			userId: String(user.id),
 			email: String(user.email),
+			role: "member",
 			externalId: extId > 0 ? extId : undefined,
 		};
 
-		const jwt = await new SignJWT(payload as any)
-			.setProtectedHeader({ alg: "HS256" })
-			.setExpirationTime(extTokenExpires)
-			.sign(encoder.encode(config.JWT_SECRET));
+    const jwt = await new SignJWT(payload as any)
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime(extTokenExpires > 0 ? `${extTokenExpires}s` : "7d")
+      .sign(encoder.encode(config.JWT_SECRET));
 
 		logger.info({ userId: user.id }, "AuthService.login - success");
 
 		return {
 			access_token: jwt,
 			expires: extTokenExpires,
-      user: {
-        id: user.id,
-        email: user.email,
-        externalId: extId,
-      }
+			user: {
+				id: user.id,
+				email: user.email,
+				externalId: extId,
+			}
 		};
 	}
 }

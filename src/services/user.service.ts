@@ -3,31 +3,23 @@ import { AppError } from "../core/http/error.js";
 import logger from "../config/logger.js";
 import { GMMemberAdapter } from "../providers/gymmaster/member.adapter.js";
 import { ExternalTokenRepository } from "../repositories/externalToken.repository.js";
+import type { AuthRequest } from "../types/index.js";
 
 const usersRepo = UserRepository;
 const extTokenRepo = ExternalTokenRepository;
 
 export class UserService {
-	static async getProfile(req: Request) {
-		const headers = req.headers;
-		const authHeader = headers["authorization"];
+    static async getProfile(req: AuthRequest) {
 
-		const token = authHeader?.split(" ")[1];
-		const userId = req.body["id"];
-
-		if (!authHeader) {
-			throw new AppError("User not authenticated", 401);
-		}
-
-		const user = await usersRepo.findById(userId);
+		const user = await usersRepo.findByEmail(req.user?.email || "");
 		if (!user) {
-			logger.warn({ userId }, "UserService.getProfile - user not found");
+			logger.warn({ userId: user.id }, "UserService.getProfile - user not found");
 			throw new AppError("User not found", 404);
 		}
 
-		const extToken = await extTokenRepo.findByUser(userId);
+		const extToken = await extTokenRepo.findByUser(user.id);
 		if (!extToken) {
-			logger.warn({ userId }, "UserService.getProfile - external token not found");
+			logger.warn({ userId: user.id }, "UserService.getProfile - external token not found");
 			throw new AppError("External token not found", 404);
 		}
 
