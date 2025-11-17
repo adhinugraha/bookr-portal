@@ -21,7 +21,7 @@ export class AuthService {
 			throw new AppError("Email and password are required", 400);
 		}
 
-		const user = await UserRepository.findByEmail(req.email);
+		const user = await usersRepo.findByEmail(req.email);
 		if (!user) {
 			logger.warn({ email }, "AuthService.login - user not found");
 			throw new AppError("Invalid credentials", 401);

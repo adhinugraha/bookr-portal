@@ -2,11 +2,9 @@ import { UserRepository } from "../repositories/user.repository.js";
 import { AppError } from "../core/http/error.js";
 import logger from "../config/logger.js";
 import { GMMemberAdapter } from "../providers/gymmaster/member.adapter.js";
-import { ExternalTokenRepository } from "../repositories/externalToken.repository.js";
 import type { AuthRequest } from "../types/index.js";
 
 const usersRepo = UserRepository;
-const extTokenRepo = ExternalTokenRepository;
 
 export class UserService {
     static async getProfile(req: AuthRequest) {
@@ -17,13 +15,7 @@ export class UserService {
 			throw new AppError("User not found", 404);
 		}
 
-		const extToken = await extTokenRepo.findByUser(user.id);
-		if (!extToken) {
-			logger.warn({ userId: user.id }, "UserService.getProfile - external token not found");
-			throw new AppError("External token not found", 404);
-		}
-
-		const extData = await GMMemberAdapter(extToken.accessToken);
+		const extData = await GMMemberAdapter(user.id);
 
     const data = {
       id: user.id,

@@ -1,10 +1,10 @@
 import { eq } from "drizzle-orm";
 import { db } from "../database/drizzle.js";
 import {
-  externalTokens,
+  externalTokenSchema,
   ExternalToken,
   NewExternalToken
-} from "../database/schema/externalTokens.js";
+} from "../database/schema/externalToken.schema.js";
 import logger from "../config/logger.js";
 import { redis } from "../database/redis.js";
 
@@ -13,10 +13,10 @@ export const ExternalTokenRepository = {
     logger.info({ userId: data.userId }, "ExternalTokenRepository.saveToken");
 
     await db
-      .insert(externalTokens)
+      .insert(externalTokenSchema)
       .values(data)
       .onConflictDoUpdate({
-        target: externalTokens.userId,
+        target: externalTokenSchema.userId,
         set: {
           accessToken: data.accessToken,
           expires: data.expires,
@@ -27,13 +27,13 @@ export const ExternalTokenRepository = {
     await redis.set( `auth:token:${data.userId}`, data.accessToken, "EX", data.expires );
   },
 
-  findByUser: async (userId: number): Promise<ExternalToken | null> => {
+  findByUser: async (userId: string): Promise<ExternalToken | null> => {
     logger.info({ userId }, "ExternalTokenRepository.findByUser");
 
     const result = await db
       .select()
-      .from(externalTokens)
-      .where(eq(externalTokens.userId, userId))
+      .from(externalTokenSchema)
+      .where(eq(externalTokenSchema.userId, userId))
       .limit(1);
 
     return result[0] || null;
