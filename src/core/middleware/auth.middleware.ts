@@ -36,7 +36,7 @@ export const AuthMiddleware = {
       logger.error({ err }, "JWT verification failed");
       return res.status(err.statusCode || err.status || 401).json({
         status: "error",
-        message: err.message || "Unauthorized",
+        message: "Authorize token expired or invalid",
       });
     }
   },
