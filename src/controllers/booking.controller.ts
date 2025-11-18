@@ -38,8 +38,9 @@ export const BookingController = {
         headers: req.headers,
         method: req.method,
       });
-      
-      const result = {}
+
+      const id = req.params["id"] || "";
+      const result = await BookingService.getDetail(id)
 
       return res
         .status(200)

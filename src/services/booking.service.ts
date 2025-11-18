@@ -9,8 +9,12 @@ import { ClassScheduleService } from "./classSchedule.service.js";
 import { ClassService } from "./class.service.js";
 import { PaymentRepository } from "../repositories/payment.repository.js";
 import { XNPaymentAdapter } from "../providers/xendit/payment.adapter.js";
+import { InvoiceRepository } from "../repositories/invoice.repository.js";
 
 const usersRepo = UserRepository;
+const bookingRepo = BookingRepository;
+const paymentRepo = PaymentRepository;
+const invoiceRepo = InvoiceRepository;
 
 export class BookingService {
   static async createBooking(req: AuthRequest) {
@@ -33,7 +37,7 @@ export class BookingService {
 
     const extBooking = await GMBookingClassAdapter(user.id, scheduleData.id);
 
-    const newBooking = await BookingRepository.create({
+    const newBooking = await bookingRepo.create({
       userId: user.id,
       externalId: extBooking.bookingid,
       classId: classData.id,
@@ -45,7 +49,7 @@ export class BookingService {
       throw new AppError("Error creating booking", 500);
     }
 
-    const newPayment = await PaymentRepository.create({
+    const newPayment = await paymentRepo.create({
       amount: price,
       status: 0,
     });
@@ -79,7 +83,7 @@ export class BookingService {
       throw new AppError("Error creating payment", 500);
     }
 
-    const updatePayment = await PaymentRepository.update(
+    const updatePayment = await paymentRepo.update(
       newPayment.id,
       {
         paymentRefId: paymentResult.reference_id,
@@ -94,5 +98,24 @@ export class BookingService {
     }
 
     return paymentResult.actions[0];
+	}
+
+  static async getDetail(id: string) {
+    const bookingData = await invoiceRepo.findByBookingId(id)
+    const scheduleData = await ClassScheduleService.getByClassId({
+      userId: bookingData.booking.userId,
+      classId: bookingData.booking.classId,
+      scheduleId: bookingData.booking.scheduleId,
+    })
+
+    const datas = {
+      ...bookingData.booking,
+      invoice: bookingData.invoice,
+      payment: bookingData.payment,
+      class: bookingData.class,
+      schedule: scheduleData
+    }
+
+		return datas;
 	}
 }

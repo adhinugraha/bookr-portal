@@ -11,10 +11,11 @@ import cors from "cors";
 const app = express();
 
 const corsOptions = {
-   origin: 'https://bookr-adhi.vercel.app',
-   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-   credentials: true,
-   optionsSuccessStatus: 204,
+  // origin: 'http://localhost:3001',
+  origin: 'https://bookr-adhi.vercel.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
