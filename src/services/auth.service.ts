@@ -115,6 +115,10 @@ export class AuthService {
 			password: password,
 			externalId: 0
 		})
+		if (!newUser) {
+			logger.error("AuthService.create - error creating user");
+			throw new AppError("Error creating user", 500);
+		}
 
 		const payload: JwtPayload = {
 			userId: String(newUser.id),
@@ -129,6 +133,16 @@ export class AuthService {
 			.sign(encoder.encode(config.JWT_SECRET));
 
 		logger.info({ userId: newUser.id }, "AuthService.register - success");
+
+		const newExternalToken = await tokensRepo.create({
+			userId: newUser.id,
+			accessToken: jwt,
+			expires: 86400
+		});
+		if (!newExternalToken) {
+			logger.error("AuthService.create - error creating external token");
+			throw new AppError("Error creating external token", 500);
+		}
 
 		return {
 			access_token: jwt,

@@ -38,4 +38,10 @@ export const ExternalTokenRepository = {
 
     return result[0] || null;
   },
+
+  create: async (externalToken: NewExternalToken): Promise<ExternalToken | null> => {
+    logger.info("ExternalTokenRepository.create %o", { externalToken: externalToken });
+    const result = await db.insert(externalTokenSchema).values(externalToken).returning();
+    return result[0];
+  },
 };
