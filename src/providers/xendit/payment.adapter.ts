@@ -16,7 +16,7 @@ export async function XNPaymentAdapter(datas: any) {
 		type: "PAY",
 		country: "ID",
 		currency: "IDR",
-		request_amount: 300000,
+        request_amount: datas.invoice.amount,
 		capture_method: "AUTOMATIC",
 		channel_code: "CARDS",
 		channel_properties: {
@@ -29,8 +29,8 @@ export async function XNPaymentAdapter(datas: any) {
 				expiry_month: datas.paymentDetail.expiryMonth,
 				expiry_year: datas.paymentDetail.expiryYear
 			},
-			failure_return_url: `https://bookr.app/payment/failed?ref=${refUri}`,
-			success_return_url: `https://bookr.app/payment/success?ref=${refUri}`,
+			failure_return_url: `https://bookr-adhi.vercel.app/payment/failed?ref=${refUri}`,
+			success_return_url: `https://bookr-adhi.vercel.app/payment/success?ref=${refUri}`,
 			statement_descriptor: "BOOKR-SERVICE-BOOKING"
 		},
 		description: `${datas.class.name} - Booking`,
