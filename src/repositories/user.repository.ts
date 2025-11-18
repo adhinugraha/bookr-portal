@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "../database/drizzle.js";
-import { userSchema, User } from "../database/schema/user.schema.js";
+import { userSchema, User, NewUser } from "../database/schema/user.schema.js";
 import logger from "../config/logger.js";
 
 export const UserRepository = {
@@ -28,5 +28,11 @@ export const UserRepository = {
         updatedAt: new Date(),
       })
       .where(eq(userSchema.id, userId));
+  },
+
+  create: async (user: NewUser): Promise<User | null> => {
+    logger.info("UserRepository.create %o", { user: user });
+    const result = await db.insert(userSchema).values(user).returning();
+    return result[0];
   },
 };
