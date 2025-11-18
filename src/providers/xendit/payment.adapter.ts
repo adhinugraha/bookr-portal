@@ -44,18 +44,24 @@ export async function XNPaymentAdapter(datas: any) {
 	const url = `${config.XENDIT_BASE_URL}/v3/payment_requests`;
 	const token = Buffer.from(`${config.XENDIT_SECRET_KEY}:`).toString("base64");
 
-	const { data } = await axios.post(url, body, {
+	const response = await axios.post(url, body, {
 		headers: { 
 			"Content-Type": "application/json",
 			"Authorization": `Basic ${token}`
 		}
 	})
 	.catch(err => {
-		logger.error({ err }, "XNPaymentAdapter error");
-		throw new VendorError( `${data.error} 1` || `${err.message} 2` || "Something went wrong", err.statusCode );
+		logger.error({ err: err.response?.data }, "XNPaymentAdapter error");
+
+		const vendorMsg = err.response?.data?.error_code 
+			|| err.response?.data?.message
+			|| err.message
+			|| "Something went wrong";
+
+		throw new VendorError(vendorMsg, err.response?.status);
 	});
 
-	const result = data.data || {};
+	const result = response.data?.data || {};
 
 	return result;
 }
