@@ -52,7 +52,7 @@ export async function XNPaymentAdapter(datas: any) {
 	})
 	.catch(err => {
 		logger.error({ err }, "XNPaymentAdapter error");
-		throw new VendorError( data.error || err.message || "Something went wrong", err.statusCode );
+		throw new VendorError( `${data.error} 1` || `${err.message} 2` || "Something went wrong", err.statusCode );
 	});
 
 	const result = data.data || {};
