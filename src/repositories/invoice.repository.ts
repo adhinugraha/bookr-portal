@@ -32,7 +32,7 @@ export const InvoiceRepository = {
       .leftJoin(paymentSchema, eq(paymentSchema.id, invoiceSchema.paymentId))
       .leftJoin(bookingSchema, eq(bookingSchema.id, invoiceSchema.bookingId))
       .leftJoin(classSchema, eq(classSchema.id, bookingSchema.classId))
-      .where(eq(invoiceSchema.bookingId, id))
+      .where(eq(invoiceSchema.id, id))
       .limit(1);
     return result[0] || null;
   },
