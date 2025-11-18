@@ -16,7 +16,7 @@ export async function XNPaymentAdapter(datas: any) {
 		type: "PAY",
 		country: "ID",
 		currency: "IDR",
-		request_amount: datas.invoice.amount,
+		request_amount: 300000,
 		capture_method: "AUTOMATIC",
 		channel_code: "CARDS",
 		channel_properties: {

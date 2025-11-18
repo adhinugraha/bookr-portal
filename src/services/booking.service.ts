@@ -26,6 +26,10 @@ export class BookingService {
     }
 
     const classData = await ClassService.getDetail(req.body.class_id);
+    if (!classData) {
+      logger.error({ userId: user.id }, "BookingService.createBooking - error getDetail user");
+      throw new AppError("Error creating booking", 500);
+    }
     
     const scheduleData = await ClassScheduleService.getByClassId({
       userId: user.id,
